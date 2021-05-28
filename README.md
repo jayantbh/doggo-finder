@@ -38,5 +38,5 @@ The hotkeys hide on Mobile UI.
 **Live Mode**  
 Point your device camera at a doggo to identify its breed, real-time! No need to upload an image.
 
-TODO: README
-TODO: Host
+**Lightbox**
+View a single image in full-screen mode.
