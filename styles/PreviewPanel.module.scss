@@ -1,0 +1,15 @@
+.imageUploader {
+  @apply h-full w-full p-6 absolute top-0 left-0;
+  aspect-ratio: 1;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 1;
+  @apply shadow-md rounded-xl;
+}
+
+.previewPanel {
+  @apply w-full h-full flex flex-col place-items-center justify-center bg-gray-100 rounded-md shadow-xl p-6;
+}

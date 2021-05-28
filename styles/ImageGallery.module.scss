@@ -1,0 +1,90 @@
+.slideImgWrapper {
+  @apply flex flex-col place-items-center justify-center fixed z-10 top-0 left-0 m-auto p-10;
+  perspective: 600px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.slideImage {
+  width: 90%;
+  max-height: 90%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background-image: url("/paw.png");
+  @apply rounded-3xl absolute border-white border-8 bg-white flex items-center justify-center flex-col text-lg text-gray-500 transition-shadow duration-500;
+
+  &:not(.fetchTile) {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+  }
+}
+
+.stickyGradient {
+  @apply sticky -top-28 -mt-20 left-0 w-full h-24 bg-gradient-to-b from-gray-200 via-gray-200 to-transparent;
+  z-index: 1;
+
+  &::after {
+    content: " ";
+    @apply absolute bg-gray-200 left-0 right-0 m-auto;
+    bottom: 99%;
+    height: 100vh;
+  }
+}
+
+.galleryControls {
+  @apply flex gap-0 lg:gap-x-4 items-center rounded-full bg-gray-200 bg-opacity-75 ring-offset-gray-200 shadow-md px-4;
+  z-index: 1000;
+}
+
+.gridImg {
+  @apply p-0.5 my-4 mx-2 rounded-xl shadow-xl border-white border-2 bg-white text-lg text-gray-500;
+  width: 200px;
+  max-height: 240px;
+  object-fit: cover;
+  background-image: url("/paw.png");
+
+  &:not(.fetchTile) {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+  }
+
+  &.fetchTile {
+    @apply border-4;
+  }
+}
+
+.fetchTile {
+  @apply bg-gradient-to-tl from-gray-300 to-gray-100;
+}
+
+.fullWidthWrapper {
+  @apply relative h-full flex justify-center overflow-auto -mt-24 -mb-10 pt-24 focus:outline-none;
+  right: -2.5rem;
+  left: 0;
+  width: calc(100% + 5rem);
+}
+
+.fullWidthImgs {
+  width: 100%;
+
+  > div {
+    @apply flex flex-col items-center;
+  }
+
+  img {
+    width: calc(100% - 5rem);
+    max-width: 600px;
+    max-height: unset;
+  }
+}
+
+.horizontalGallery {
+  position: relative;
+  left: -2.5rem;
+  right: -2.5rem;
+  margin: auto;
+  width: calc(100% + 5rem);
+  @apply h-full flex items-center justify-center;
+}

@@ -1,0 +1,25 @@
+.btn {
+  z-index: 1;
+  @apply rounded-full shadow-md transition-shadow;
+
+  svg {
+    @apply transition;
+    transform: rotate(0deg);
+  }
+
+  &.df-spin:hover svg {
+    transform: rotate(360deg);
+  }
+
+  &:focus {
+    outline: none;
+  }
+  &:hover,
+  &:focus {
+    @apply shadow-sm;
+
+    svg {
+      @apply text-gray-500;
+    }
+  }
+}

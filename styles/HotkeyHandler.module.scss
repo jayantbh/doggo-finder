@@ -1,0 +1,56 @@
+$bg-color: #c3c3c3;
+$shadow-color: #999;
+$rounded: 4px;
+
+.hotkey {
+  @apply text-white font-bold border-none absolute font-mono text-xs py-0.5 px-1 leading-none;
+  bottom: -2.5px;
+  right: -2.5px;
+  background-color: $bg-color;
+  box-shadow: 0 2px 0 $shadow-color;
+  border-radius: $rounded;
+
+  &:hover .detail {
+    pointer-events: initial;
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+$arrow-size: 4px;
+
+.detail {
+  @apply absolute bottom-full left-0 font-light leading-none py-1 px-1 transition;
+  font-family: "Arvo", sans-serif;
+  background: black;
+  font-size: smaller;
+  white-space: nowrap;
+  max-width: 200px;
+  width: max-content;
+  background-color: darken($bg-color, 5%);
+  box-shadow: 0 1px 0 $shadow-color;
+  border-radius: $rounded;
+  pointer-events: none;
+  z-index: 99999;
+
+  transform: translateY(10px);
+  opacity: 0;
+
+  &::before {
+    content: " ";
+    position: absolute;
+    left: $arrow-size - 0.5px;
+    top: calc(100% - 0px);
+    border-width: $arrow-size $arrow-size 0 $arrow-size;
+    border-color: $shadow-color transparent transparent transparent;
+  }
+
+  &::after {
+    content: " ";
+    position: absolute;
+    left: $arrow-size - 0.5px;
+    top: calc(100% - 1px);
+    border-width: $arrow-size $arrow-size 0 $arrow-size;
+    border-color: darken($bg-color, 5%) transparent transparent transparent;
+  }
+}

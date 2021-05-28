@@ -1,0 +1,4 @@
+.predictionPill {
+  @apply flex items-center ring-2 px-3 py-2 text-xs text-gray-700 rounded-full cursor-pointer;
+  z-index: 1;
+}
