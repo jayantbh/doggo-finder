@@ -20,8 +20,10 @@ import { FileUploadContext } from "../context/file-upload";
 import { ToastContext, ToastType } from "../context/toast-context";
 import { WorkerEvents, WorkerMsg } from "../types/worker";
 import { RequestPayload } from "../pages/api/get-dogs";
+import { gtagEvent, EventType } from "../utils/gtag";
 
 const DEFAULT_IMG_COUNT = 10;
+const DEFAULT_RETRY_COUNT = 3;
 
 type Props = {
   src: string;
@@ -53,7 +55,21 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
   }, []);
 
   const onBreedSelect = useCallback(
-    async (breed: Prediction, count = DEFAULT_IMG_COUNT, retrial = 3) => {
+    async (
+      breed: Prediction,
+      count = DEFAULT_IMG_COUNT,
+      retrial = DEFAULT_RETRY_COUNT
+    ) => {
+      if (retrial === DEFAULT_RETRY_COUNT) {
+        gtagEvent({
+          action: EventType.BREED_SELECT,
+          value: {
+            breed: breed.className,
+            probability: breed.probability,
+            count: count,
+          },
+        });
+      }
       if (breed.className !== selectedBreed?.className) {
         linksMapRef.current = {};
         setSelectedPhotos(null);
@@ -95,6 +111,11 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
           ...linksMap,
         };
 
+        gtagEvent({
+          action: EventType.IMG_FETCH,
+          value: { count, retrial, new_links: links.length },
+        });
+
         setSelectedPhotos((urls) => [...(urls || []), ...(links as string[])]);
       } catch (e) {
         console.error(e);
@@ -114,8 +135,15 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
 
     const listener = (e: WorkerMsg) => {
       if (e.data.e === WorkerEvents.TF_ERROR) return;
-
       const { preds } = e.data;
+
+      gtagEvent({
+        action: EventType.BREED_DETECT,
+        value: {
+          breeds: preds?.map((p) => p.className).join(",") as string,
+          count: preds?.length as number,
+        },
+      });
       setPredictions(preds?.length ? preds : null);
     };
 

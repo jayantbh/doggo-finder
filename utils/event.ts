@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import { gtagEvent, EventType } from "./gtag";
 import { getImgSrcFromFile } from "./image";
 
 export const checkFilesInEvent = (
@@ -31,5 +32,10 @@ export const noDefaultOp = (e: Event | React.UIEvent) => e.preventDefault();
 export const getImageFromClipboardEvent = async (e: ClipboardEvent) => {
   const file = getFileFromEvent(e);
   if (!file) return;
+
+  gtagEvent({
+    action: EventType.FILE_PASTE,
+    value: { type: file.type, size: file.size },
+  });
   return await getImgSrcFromFile(file);
 };

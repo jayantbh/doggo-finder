@@ -23,6 +23,7 @@ import { FileUploadProvider } from "../context/providers/FileUploadProvider";
 import { ToastContext, ToastType } from "../context/toast-context";
 import { FileDragState, FileDragStateT, PreviewImg } from "../types/types";
 import { WorkerEvents, WorkerMsg } from "../types/worker";
+import { gtagEvent, EventType } from "../utils/gtag";
 
 export default function Home() {
   const { addToast } = useContext(ToastContext);
@@ -75,6 +76,11 @@ export default function Home() {
 
         if (file) {
           let src = await getImgSrcFromFile(file);
+
+          gtagEvent({
+            action: EventType.FILE_UPLOAD,
+            value: { type: file.type, size: file.size, source: "drag_drop" },
+          });
           setPreviewSrc(src);
         }
       } catch (e) {
@@ -99,6 +105,11 @@ export default function Home() {
 
         if (file) {
           let src = await getImgSrcFromFile(file);
+
+          gtagEvent({
+            action: EventType.FILE_UPLOAD,
+            value: { type: file.type, size: file.size, source: "file_manager" },
+          });
           setPreviewSrc(src);
         }
       } catch {

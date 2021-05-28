@@ -2,10 +2,11 @@ import React, { FC, useState } from "react";
 import cn from "classnames";
 import { v4 as uuid } from "uuid";
 
-import { Toast, ToastContext, ToastType } from "../toast-context";
+import { ToastContext, ToastType } from "../toast-context";
 import { CrossFlat, Check, Exclaim, Info } from "../../components/Icons";
 import { HotkeyHandler } from "../../components/HotkeyHandler";
 import { AnimatePresence, motion } from "framer-motion";
+import { EventType, gtagEvent } from "../../utils/gtag";
 
 const DEFAULT_TIMEOUT = 5;
 
@@ -20,6 +21,11 @@ export const ToastProvider: FC = ({ children }) => {
   const addToast: ToastContext["addToast"] = (t) => {
     const id = uuid();
     setToasts((ts) => [...ts, { id, ...t }]);
+
+    gtagEvent({
+      action: EventType.TOAST,
+      value: { type: t.type, value: String(t.content) },
+    });
 
     setTimeout(() => {
       removeToast(id);

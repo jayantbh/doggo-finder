@@ -1,5 +1,5 @@
 import { motion, HTMLMotionProps } from "framer-motion";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import cn from "classnames";
 import { useSwipeable, SwipeCallback } from "react-swipeable";
 
@@ -8,6 +8,7 @@ import { clamp } from "../utils/math";
 import { Fetch } from "./Icons";
 import { HotkeyHandler } from "./HotkeyHandler";
 import { Puppy } from "./Puppy";
+import { gtagEvent, EventType } from "../utils/gtag";
 
 const MAX_IMG_ANGLE = 20;
 
@@ -32,6 +33,13 @@ export const HorizontalGallery: FC<{
   onPrev,
   onNext,
 }) => {
+  useEffect(() => {
+    gtagEvent({
+      action: EventType.GALLERY_X,
+      value: { open: "true" },
+    });
+  }, []);
+
   const maxHorizontalImgLimit = photos.length >= MAX_HORIZ_IMG_LIMIT;
 
   const handlers = useSwipeable({

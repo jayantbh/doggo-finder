@@ -6,6 +6,7 @@ import { InView } from "react-intersection-observer";
 import css from "../styles/ImageGallery.module.scss";
 import { splitEvery, transpose } from "../utils/array";
 import { Fetch } from "./Icons";
+import { gtagEvent, EventType } from "../utils/gtag";
 
 const getNumCols = () => Math.max(Math.floor(window.innerWidth / 200 - 1), 1);
 
@@ -20,6 +21,10 @@ export const VerticalGallery: FC<{
 
   useEffect(() => {
     elRef.current?.focus();
+    gtagEvent({
+      action: EventType.GALLERY_Y,
+      value: { open: "true" },
+    });
   }, []);
 
   useEffect(() => {

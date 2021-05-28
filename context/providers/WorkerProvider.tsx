@@ -4,6 +4,7 @@ import { ToastContext, ToastType } from "../toast-context";
 import { WorkerContext } from "../worker";
 import { TensorFlowState } from "../../types/types";
 import { WorkerMsg, WorkerEvents, WorkerErrors } from "../../types/worker";
+import { EventType, gtagEvent } from "../../utils/gtag";
 
 export const WorkerProvider: FC = ({ children }) => {
   const { addToast } = useContext(ToastContext);
@@ -17,10 +18,19 @@ export const WorkerProvider: FC = ({ children }) => {
       new URL("../../worker/worker.ts", import.meta.url)
     );
 
+    const start = new Date().getTime();
+
     workerRef.current.onmessage = (e: WorkerMsg) => {
-      if (e.data.e === WorkerEvents.TF_LOADED)
+      if (e.data.e === WorkerEvents.TF_LOADED) {
         setTfState(TensorFlowState.SUCCESS);
-      else if (e.data.e === WorkerEvents.TF_ERROR) {
+
+        const time = new Date().getTime() - start;
+
+        gtagEvent({
+          action: EventType.ML_LOAD,
+          value: { time },
+        });
+      } else if (e.data.e === WorkerEvents.TF_ERROR) {
         switch (e.data.err?.type) {
           case WorkerErrors.MODEL_NOT_LOADED: {
             setTfState(TensorFlowState.FAILURE);
