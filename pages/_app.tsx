@@ -1,14 +1,15 @@
-import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
+
+import "../styles/globals.scss";
 import { ToastProvider } from "../context/providers/ToastProvider";
 import { WorkerProvider } from "../context/providers/WorkerProvider";
 
 const meta = {
   title: "Doggo Finder",
   desc: "Instant dog breed recognizer, and breed images viewer",
-  image: "doggo-finder.png",
+  image: "/doggo-finder.png",
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -20,13 +21,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content={meta.desc} />
 
         <meta property="og:type" content="website" />
-        {/* <meta property="og:url" content="https://doggofinder.jay.run/" /> */}
+        {/* <meta property="og:url" content="https://doggo-finder.jay.run/" /> */}
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.desc} />
         <meta property="og:image" content={meta.image} />
 
         <meta property="twitter:card" content="summary_large_image" />
-        {/* <meta property="twitter:url" content="https://doggofinder.jay.run/" /> */}
+        {/* <meta property="twitter:url" content="https://doggo-finder.jay.run/" /> */}
         <meta property="twitter:title" content={meta.title} />
         <meta property="twitter:description" content={meta.desc} />
         <meta property="twitter:image" content={meta.image} />
