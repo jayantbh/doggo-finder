@@ -14,29 +14,18 @@ export type RequestPayload = {
   data?: GetSampleResponse;
 };
 
+// Reverted the original approach of reading files at runtime and picking one
+// at random due to this issue: https://github.com/vercel/next.js/issues/8251
+
 export default async (
   req: NextApiRequest,
   res: NextApiResponse<RequestPayload>
 ) => {
-  const imagesDir =
-    process.env.NODE_ENV === "production"
-      ? "sample-images"
-      : "public/sample-images";
-  const publicDir = process.env.NODE_ENV === "production" ? "" : "public";
-
   try {
-    const imagesAbsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, imagesDir);
-    const files = fs.readdirSync(imagesAbsDir);
+    const index = randomInt(1, 5);
+    const file = `sample-images/sample-${index}.png`;
 
-    const index = randomInt(0, files.length - 1);
-    const file = files[index];
-
-    return res.status(200).json({
-      data: path.relative(
-        path.join(serverRuntimeConfig.PROJECT_ROOT, publicDir),
-        path.join(imagesAbsDir, file)
-      ),
-    });
+    return res.status(200).json({ data: file });
   } catch (e) {
     return res.status(400).json({ err: e });
   }
