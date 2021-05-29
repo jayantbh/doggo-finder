@@ -82,11 +82,7 @@ export const FileUploader: FC<Props> = ({
 
           <span
             role="button"
-            className={cn(
-              "hidden",
-              css.sampleUploadBtn,
-              loadingSample && css.progress
-            )}
+            className={cn(css.sampleUploadBtn, loadingSample && css.progress)}
             onClick={onSampleUpload}
           >
             No pictures on hand? Try a sample!

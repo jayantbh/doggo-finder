@@ -18,20 +18,23 @@ export default async (
   req: NextApiRequest,
   res: NextApiResponse<RequestPayload>
 ) => {
+  const imagesDir =
+    process.env.NODE_ENV === "production"
+      ? "sample-images"
+      : "public/sample-images";
+  const publicDir = process.env.NODE_ENV === "production" ? "" : "public";
+
   try {
-    const imagesDir = path.join(
-      serverRuntimeConfig.PROJECT_ROOT,
-      "public/sample-images"
-    );
-    const files = fs.readdirSync(imagesDir);
+    const imagesAbsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, imagesDir);
+    const files = fs.readdirSync(imagesAbsDir);
 
     const index = randomInt(0, files.length - 1);
     const file = files[index];
 
     return res.status(200).json({
       data: path.relative(
-        path.join(serverRuntimeConfig.PROJECT_ROOT, "public"),
-        path.join(imagesDir, file)
+        path.join(serverRuntimeConfig.PROJECT_ROOT, publicDir),
+        path.join(imagesAbsDir, file)
       ),
     });
   } catch (e) {
