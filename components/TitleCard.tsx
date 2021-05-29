@@ -4,7 +4,7 @@ import cn from "classnames";
 
 import { AnimateSVG } from "./AnimateSVG";
 import { Paw } from "./Paw";
-import { TensorFlowState } from "../types/types";
+import { RequestState } from "../types/types";
 import { WorkerContext } from "../context/worker";
 
 // From: https://easings.net/#easeOutBounce
@@ -45,7 +45,7 @@ type TitleCard = FC<{
 export const TitleCard: TitleCard = ({ isPreviewing }) => {
   const { tfState } = useContext(WorkerContext);
 
-  const tfLoading = tfState === TensorFlowState.LOADING;
+  const tfLoading = tfState === RequestState.LOADING;
 
   return (
     <motion.div
@@ -63,8 +63,8 @@ export const TitleCard: TitleCard = ({ isPreviewing }) => {
           <Paw
             className={cn("transition-colors", {
               "text-gray-300 text-opacity-90": tfLoading,
-              "text-gray-400": tfState === TensorFlowState.SUCCESS,
-              "text-red-200": tfState === TensorFlowState.FAILURE,
+              "text-gray-400": tfState === RequestState.SUCCESS,
+              "text-red-200": tfState === RequestState.FAILURE,
             })}
             height={110}
             width={110}
@@ -78,9 +78,9 @@ export const TitleCard: TitleCard = ({ isPreviewing }) => {
   );
 };
 
-const getTextForTfState = (state: TensorFlowState) => {
+const getTextForTfState = (state: RequestState) => {
   switch (state) {
-    case TensorFlowState.LOADING:
+    case RequestState.LOADING:
       return (
         <motion.div
           key="2"
@@ -95,7 +95,7 @@ const getTextForTfState = (state: TensorFlowState) => {
           </span>
         </motion.div>
       );
-    case TensorFlowState.SUCCESS:
+    case RequestState.SUCCESS:
       return (
         <motion.div
           key="1"
@@ -105,9 +105,9 @@ const getTextForTfState = (state: TensorFlowState) => {
           <div className="text-xl text-gray-400">
             Upload an image to get started
           </div>
-          <span className="text-xs mt-1 text-gray-400">
+          <div className="text-xs mt-1 text-gray-400">
             Drag or paste an image, or use the button
-          </span>
+          </div>
         </motion.div>
       );
     default:

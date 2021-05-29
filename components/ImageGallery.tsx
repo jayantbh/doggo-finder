@@ -10,7 +10,12 @@ import React, {
 } from "react";
 
 import css from "../styles/ImageGallery.module.scss";
-import { DogLoadState, Prediction } from "../types/types";
+import {
+  DogLoadSpecificState,
+  DogLoadState,
+  Prediction,
+  RequestState,
+} from "../types/types";
 import {
   CloseBtn,
   DownBtn,
@@ -28,7 +33,7 @@ type ImageGallery = FC<{
   sourceImg: string;
   photos: string[];
   breed: Prediction | null;
-  onLoadMore: (num: number) => any;
+  onLoadMore: (count?: any, retrial?: any) => any;
   dogState: DogLoadState;
   onClose: Function;
 }>;
@@ -48,8 +53,8 @@ export const ImageGallery: ImageGallery = ({
   const [galleryMode, setGalleryMode] =
     useState<"horizontal" | "vertical">("horizontal");
 
-  const isLoading = dogState === DogLoadState.LOADING;
-  const noMoreImgs = dogState === DogLoadState.NO_MORE;
+  const isLoading = dogState === RequestState.LOADING;
+  const noMoreImgs = dogState === DogLoadSpecificState.NO_MORE;
 
   let visiblePhotos = useMemo(() => {
     if (galleryMode === "vertical") return photos;

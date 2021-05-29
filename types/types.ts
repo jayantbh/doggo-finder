@@ -4,10 +4,11 @@ export type Prediction = {
   link: string;
 };
 
-export enum TensorFlowState {
+export enum RequestState {
   FAILURE = "FAILURE",
   LOADING = "LOADING",
   SUCCESS = "SUCCESS",
+  DORMANT = "DORMANT",
 }
 
 export enum FileDragState {
@@ -16,11 +17,10 @@ export enum FileDragState {
 }
 export type FileDragStateT = FileDragState | null;
 
-export enum DogLoadState {
-  FAILURE = "FAILURE",
-  LOADING = "LOADING",
-  SUCCESS = "SUCCESS",
+export enum DogLoadSpecificState {
   NO_MORE = "NO_MORE",
 }
+
+export type DogLoadState = RequestState | DogLoadSpecificState;
 
 export type PreviewImg = string | null | undefined;

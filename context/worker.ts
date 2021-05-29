@@ -1,12 +1,12 @@
 import { createContext } from "react";
-import { TensorFlowState } from "../types/types";
+import { RequestState } from "../types/types";
 
 type WorkerContext = {
   worker: Worker | null;
-  tfState: TensorFlowState;
+  tfState: RequestState;
 };
 
 export const WorkerContext = createContext<WorkerContext>({
   worker: null,
-  tfState: TensorFlowState.LOADING,
+  tfState: RequestState.LOADING,
 });

@@ -1,4 +1,4 @@
-export const b64ImgToBitMap = async (b64img: string): Promise<ImageBitmap> => {
+export const imgSrcToBitMap = async (src: string): Promise<ImageBitmap> => {
   return new Promise((resolve) => {
     const img = new window.Image();
     img.onload = () => {
@@ -9,7 +9,7 @@ export const b64ImgToBitMap = async (b64img: string): Promise<ImageBitmap> => {
       const bmp = canvas.transferToImageBitmap();
       resolve(bmp);
     };
-    img.src = b64img;
+    img.src = src;
   });
 };
 

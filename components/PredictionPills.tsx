@@ -19,7 +19,7 @@ const getTitleFromPred = (pred: Prediction) => {
 
 type Props = {
   predictions: Prediction[] | null;
-  onSelect: (breed: Prediction) => any;
+  onSelect: (breed: Prediction, count?: any) => any;
   loadingBreed: Prediction | null;
 };
 

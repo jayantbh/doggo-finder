@@ -12,7 +12,12 @@ import { WorkerContext } from "../context/worker";
 
 import css from "../styles/PreviewPanel.module.scss";
 import { PredictionPills } from "./PredictionPills";
-import { DogLoadState, Prediction } from "../types/types";
+import {
+  DogLoadSpecificState,
+  DogLoadState,
+  Prediction,
+  RequestState,
+} from "../types/types";
 import { request } from "../utils/request";
 import { ImageGallery } from "./ImageGallery";
 import { CloseBtn, UploadBtn } from "./Buttons";
@@ -46,7 +51,7 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
 
   const [selectedBreed, setSelectedBreed] = useState<Prediction | null>(null);
   const [selectedPhotos, setSelectedPhotos] = useState<string[] | null>(null);
-  const [dogState, setDogState] = useState<DogLoadState>(DogLoadState.SUCCESS);
+  const [dogState, setDogState] = useState<DogLoadState>(RequestState.SUCCESS);
 
   const resetState = useCallback(() => {
     setPredictions([]);
@@ -75,14 +80,14 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
         setSelectedPhotos(null);
       }
       setSelectedBreed(breed);
-      setDogState(DogLoadState.LOADING);
+      setDogState(RequestState.LOADING);
       try {
         let links = await request<RequestPayload>(
           "/api/get-dogs?link=" + breed.link + count
         ).then((r) => r.data);
 
         if (!links) {
-          setDogState(DogLoadState.FAILURE);
+          setDogState(RequestState.FAILURE);
           addToast({
             type: ToastType.ERROR,
             content:
@@ -99,7 +104,7 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
           if (retrial > 0) {
             onBreedSelect(breed, count, retrial - 1);
           } else {
-            setDogState(DogLoadState.NO_MORE);
+            setDogState(DogLoadSpecificState.NO_MORE);
           }
           return;
         }
@@ -125,7 +130,7 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
             "Failed to fetch " + breed.className + " photos. Please try again.",
         });
       }
-      setDogState(DogLoadState.SUCCESS);
+      setDogState(RequestState.SUCCESS);
     },
     [selectedBreed, setSelectedBreed, setSelectedPhotos, setDogState, addToast]
   );
@@ -174,7 +179,7 @@ export const PreviewPanel: FC<Props> = ({ src, onReset }) => {
                 predictions={predictions}
                 onSelect={onBreedSelect}
                 loadingBreed={
-                  dogState === DogLoadState.LOADING ? selectedBreed : null
+                  dogState === RequestState.LOADING ? selectedBreed : null
                 }
               />
               <div className="overflow-hidden h-full flex justify-center items-center my-2 p-2">

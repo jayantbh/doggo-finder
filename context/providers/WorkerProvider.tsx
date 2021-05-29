@@ -2,16 +2,14 @@ import React, { FC, useContext, useEffect, useRef, useState } from "react";
 
 import { ToastContext, ToastType } from "../toast-context";
 import { WorkerContext } from "../worker";
-import { TensorFlowState } from "../../types/types";
+import { RequestState } from "../../types/types";
 import { WorkerMsg, WorkerEvents, WorkerErrors } from "../../types/worker";
 import { EventType, gtagEvent } from "../../utils/gtag";
 
 export const WorkerProvider: FC = ({ children }) => {
   const { addToast } = useContext(ToastContext);
   const workerRef = useRef<Worker | null>(null);
-  const [tfState, setTfState] = useState<TensorFlowState>(
-    TensorFlowState.LOADING
-  );
+  const [tfState, setTfState] = useState<RequestState>(RequestState.LOADING);
 
   useEffect(() => {
     workerRef.current = new Worker(
@@ -22,7 +20,7 @@ export const WorkerProvider: FC = ({ children }) => {
 
     workerRef.current.onmessage = (e: WorkerMsg) => {
       if (e.data.e === WorkerEvents.TF_LOADED) {
-        setTfState(TensorFlowState.SUCCESS);
+        setTfState(RequestState.SUCCESS);
 
         const time = new Date().getTime() - start;
 
@@ -33,14 +31,14 @@ export const WorkerProvider: FC = ({ children }) => {
       } else if (e.data.e === WorkerEvents.TF_ERROR) {
         switch (e.data.err?.type) {
           case WorkerErrors.MODEL_NOT_LOADED: {
-            setTfState(TensorFlowState.FAILURE);
+            setTfState(RequestState.FAILURE);
             return addToast({
               type: ToastType.ERROR,
               content: "The ML model hasn't loaded yet.",
             });
           }
           case WorkerErrors.MODEL_LOAD_FAILED: {
-            setTfState(TensorFlowState.FAILURE);
+            setTfState(RequestState.FAILURE);
             return addToast({
               type: ToastType.ERROR,
               content: "The ML model failed to load. Please reload.",

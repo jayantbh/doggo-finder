@@ -2,3 +2,28 @@
   z-index: 1;
   position: relative;
 }
+
+@keyframes swipe {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.sampleUploadBtn {
+  @apply relative text-xs mt-5 text-gray-400 cursor-pointer overflow-hidden hover:underline;
+  z-index: 1;
+
+  &::after {
+    @apply absolute bottom-0 left-0 w-full bg-current transition-transform;
+    content: " ";
+    height: 1px;
+    transform: translateX(-100%);
+  }
+
+  &.progress::after {
+    animation: swipe 1s ease-in-out infinite;
+  }
+}

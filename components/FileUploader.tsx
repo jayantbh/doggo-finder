@@ -14,7 +14,7 @@ import { noDefaultOp } from "../utils/event";
 import { Upload } from "./Icons";
 import { FileUploadContext } from "../context/file-upload";
 import { WorkerContext } from "../context/worker";
-import { TensorFlowState } from "../types/types";
+import { RequestState } from "../types/types";
 
 export type DragState = "VALID" | "INVALID" | null;
 
@@ -27,18 +27,23 @@ type Props = {
   dragState: DragState;
   onInput: DOMAttributes<HTMLInputElement>["onInput"];
   isPreviewing: boolean;
+  onSampleUpload: () => any;
+  sampleUploadState: RequestState;
 };
 
 export const FileUploader: FC<Props> = ({
   dragState,
   onInput,
   isPreviewing,
+  onSampleUpload,
+  sampleUploadState,
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const fileUploadContext = useContext(FileUploadContext);
   const { tfState } = useContext(WorkerContext);
 
-  const tfLoaded = tfState === TensorFlowState.SUCCESS;
+  const tfLoaded = tfState === RequestState.SUCCESS;
+  const loadingSample = sampleUploadState === RequestState.LOADING;
 
   const triggerFileDialog = useCallback(() => {
     inputRef.current?.click();
@@ -52,24 +57,38 @@ export const FileUploader: FC<Props> = ({
         animate={tfLoaded && !isPreviewing ? "active" : "hidden"}
         variants={variants}
       >
-        <label
-          htmlFor="file-upload"
-          className={cn(css.uploadBtnLabel, dragState && "pointer-events-none")}
-        >
-          <button
-            onClick={triggerFileDialog}
-            autoFocus={true}
-            className="relative p-3 mt-2 ring-2 ring-gray-300 rounded-full hover:shadow-inner transition-shadow focus:ring-gray-500 focus:outline-none"
+        <div className="flex flex-col items-center">
+          <label
+            htmlFor="file-upload"
+            className={cn(
+              css.uploadBtnLabel,
+              dragState && "pointer-events-none"
+            )}
           >
-            <Upload size={24} className="text-gray-500" />
-            <HotkeyHandler
-              hotkey="U"
-              detail="Press U to upload a file"
-              onHotkey={triggerFileDialog}
-              disabled={isPreviewing}
-            />
-          </button>
-        </label>
+            <button
+              onClick={triggerFileDialog}
+              autoFocus={true}
+              className="relative p-3 mt-2 ring-2 ring-gray-300 rounded-full hover:shadow-inner transition-shadow focus:ring-gray-500 focus:outline-none"
+            >
+              <Upload size={24} className="text-gray-500" />
+              <HotkeyHandler
+                hotkey="U"
+                detail="Press U to upload a file"
+                onHotkey={triggerFileDialog}
+                disabled={isPreviewing}
+              />
+            </button>
+          </label>
+
+          <span
+            role="button"
+            className={cn(css.sampleUploadBtn, loadingSample && css.progress)}
+            onClick={onSampleUpload}
+          >
+            No pictures on hand? Try a sample!
+          </span>
+        </div>
+
         <label
           htmlFor="file-upload"
           className={cn("h-full w-full absolute p-10 top-0 left-0")}

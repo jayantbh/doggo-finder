@@ -20,7 +20,7 @@ export const HorizontalGallery: FC<{
   sourceImg?: string | null;
   photos: string[];
   noMoreImgs: boolean;
-  loadMore: (num: number) => any;
+  loadMore: (count?: any) => any;
   onPrev: SwipeCallback;
   onNext: SwipeCallback;
 }> = ({
@@ -75,7 +75,7 @@ export const HorizontalGallery: FC<{
                 ) : !maxHorizontalImgLimit ? (
                   <motion.button
                     className="relative ring-2 ring-current rounded-full px-4 py-2 mt-2 focus:outline-none hover:bg-gray-200 focus:bg-gray-200 transition-colors shadow-lg hover:shadow-sm justify-center"
-                    onClick={loadMore as any}
+                    onClick={() => loadMore()}
                   >
                     {!isLoading ? (
                       "Fetch?"
@@ -85,7 +85,7 @@ export const HorizontalGallery: FC<{
                     <HotkeyHandler
                       hotkey="Enter"
                       detail="Press Enter to load more images"
-                      onHotkey={loadMore}
+                      onHotkey={() => loadMore()}
                     />
                   </motion.button>
                 ) : (

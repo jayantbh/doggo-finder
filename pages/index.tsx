@@ -17,13 +17,16 @@ import {
 } from "../utils/event";
 import { PreviewPanel } from "../components/PreviewPanel";
 import { TitleCard } from "../components/TitleCard";
-import { b64ImgToBitMap, getImgSrcFromFile } from "../utils/image";
+import { imgSrcToBitMap, getImgSrcFromFile } from "../utils/image";
 import { WorkerContext } from "../context/worker";
 import { FileUploadProvider } from "../context/providers/FileUploadProvider";
 import { ToastContext, ToastType } from "../context/toast-context";
 import { FileDragState, FileDragStateT, PreviewImg } from "../types/types";
 import { WorkerEvents, WorkerMsg } from "../types/worker";
 import { gtagEvent, EventType } from "../utils/gtag";
+import { request } from "../utils/request";
+import { useRequest } from "../hooks/use-request";
+import { RequestPayload as GetSampleResponse } from "./api/get-sample-dog";
 
 export default function Home() {
   const { addToast } = useContext(ToastContext);
@@ -153,10 +156,25 @@ export default function Home() {
     };
   }, [handleDragEnter, handleDragLeave, handleDrop, tfState]);
 
+  const [getSampleDog, sampleReqState] = useRequest<GetSampleResponse>();
+
+  const pickSampleImage = useCallback(async () => {
+    try {
+      const response = await getSampleDog("/api/get-sample-dog");
+      setPreviewSrc(response.data);
+    } catch (e) {
+      console.error(e);
+      addToast({
+        type: ToastType.ERROR,
+        content: "Couldn't load sample image. Please retry.",
+      });
+    }
+  }, [getSampleDog]);
+
   useEffect(() => {
     if (!previewSrc) return;
 
-    b64ImgToBitMap(previewSrc).then((bmp) => {
+    imgSrcToBitMap(previewSrc).then((bmp) => {
       worker?.postMessage(
         { e: WorkerEvents.DETECT, bmp } as WorkerMsg["data"],
         [bmp]
@@ -173,6 +191,8 @@ export default function Home() {
             dragState={dragState}
             onInput={handleInputFileUpload}
             isPreviewing={Boolean(previewSrc)}
+            onSampleUpload={pickSampleImage}
+            sampleUploadState={sampleReqState}
           />
           {!!previewSrc && (
             <PreviewPanel

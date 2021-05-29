@@ -3,7 +3,6 @@ import { render } from "@testing-library/react";
 
 import { TitleCard } from "../TitleCard";
 import { WorkerContext } from "../../context/worker";
-import { TensorFlowState } from "../../types/types";
 
 describe("TitleCard", () => {
   it("shows correct text for loading state", () => {

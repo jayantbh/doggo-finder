@@ -11,3 +11,5 @@ export type GetAllBreedsResponse = {
   message: Record<Breed, SubBreed[]>;
   status: string;
 };
+
+export type GetSampleResponse = DogImgUrl;
