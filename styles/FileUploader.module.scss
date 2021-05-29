@@ -13,7 +13,7 @@
 }
 
 .sampleUploadBtn {
-  @apply relative text-xs mt-5 text-gray-400 cursor-pointer overflow-hidden hover:underline;
+  @apply relative text-xs mt-5 text-gray-400 cursor-pointer overflow-hidden select-none hover:underline;
   z-index: 1;
 
   &::after {
