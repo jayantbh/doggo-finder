@@ -31,7 +31,7 @@ export const PredictionPills: FC<Props> = ({
   return (
     <>
       <div className="text-gray-600 mb-4">detected breeds</div>
-      <div className="flex gap-2 mb-4 h-8 flex-shrink-0">
+      <div className="flex flex-col gap-2 mb-4 h-16 flex-shrink-0">
         {predictions === null ? (
           <motion.div
             key="no-preds"
@@ -47,15 +47,22 @@ export const PredictionPills: FC<Props> = ({
             No predictions available. Maybe this isn't a dog?
           </motion.div>
         ) : (
-          predictions.map((pred, i) => (
-            <PredictionPill
-              key={pred.className}
-              pred={pred}
-              index={i}
-              onSelect={onSelect}
-              isLoading={loadingBreed?.className === pred.className}
-            />
-          ))
+          <>
+            <div className="flex gap-2 h-8">
+              {predictions.map((pred, i) => (
+                <PredictionPill
+                  key={pred.className}
+                  pred={pred}
+                  index={i}
+                  onSelect={onSelect}
+                  isLoading={loadingBreed?.className === pred.className}
+                />
+              ))}
+            </div>
+            <div className="text-xs text-center">
+              select a breed to see photos
+            </div>
+          </>
         )}
       </div>
     </>
